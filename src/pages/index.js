@@ -13,7 +13,7 @@ export default function Home() {
                     var li = document.createElement('li');
                     var a = document.createElement('a');
                     a.href = "#";
-                    a.onclick = subscribeApp.bind(this, page.id, page.access_token);
+                    a.onclick = leadgenForms.bind(this, page.id, page.access_token);
                     a.innerHTML = page.name;
                     li.appendChild(a);
                     ul.appendChild(li);
@@ -22,6 +22,19 @@ export default function Home() {
         }, { scope: 'pages_show_list' });
 
     };
+
+    function leadgenForms(page_id, page_access_token) {
+        console.log('Fetching the forms of page ' + page_id);
+        FB.api(
+            '/' + page_id + '/leadgen_forms',
+            { access_token: page_access_token },
+            function (response) {
+                if (response && !response.error) {
+                    console.log('Forms fetched successfully!', response);
+                }
+            }
+        );
+    }
 
     function subscribeApp(page_id, page_access_token) {
         console.log('Subscribing page to app! ' + page_id);
