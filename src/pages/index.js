@@ -2,35 +2,38 @@ import { useEffect } from "react";
 
 export default function Home() {
     const onLoginClick = () => {
-        // FB.login(function (response) {
-        //   console.log('Successfully logged in', response);
-        //   FB.api('/me/accounts', function (response) {
-        //     console.log('Successfully retrieved pages', response);
-        //     var pages = response.data;
-        //     var ul = document.getElementById('list');
-        //     for (var i = 0, len = pages.length; i < len; i++) {
-        //       var page = pages[i];
-        //       var li = document.createElement('li');
-        //       var a = document.createElement('a');
-        //       a.href = "#";
-        //       a.onclick = subscribeApp.bind(this, page.id, page.access_token);
-        //       a.innerHTML = page.name;
-        //       li.appendChild(a);
-        //       ul.appendChild(li);
-        //     }
-        //   });
-        // }, {});
         FB.login(function (response) {
-            if (response.authResponse) {
-                console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function (response) {
-                    console.log('Good to see you, ' + response.name + '.');
-                });
-            } else {
-                console.log('User cancelled login or did not fully authorize.');
-            }
-        });
+            console.log('Successfully logged in', response);
+            FB.api('/me/accounts', function (response) {
+                console.log('Successfully retrieved pages', response);
+                var pages = response.data;
+                var ul = document.getElementById('list');
+                for (var i = 0, len = pages.length; i < len; i++) {
+                    var page = pages[i];
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.href = "#";
+                    a.onclick = subscribeApp.bind(this, page.id, page.access_token);
+                    a.innerHTML = page.name;
+                    li.appendChild(a);
+                    ul.appendChild(li);
+                }
+            });
+        }, { scope: 'pages_show_list' });
+
     };
+
+    function subscribeApp(page_id, page_access_token) {
+        console.log('Subscribing page to app! ' + page_id);
+        FB.api(
+            '/' + page_id + '/subscribed_apps',
+            'post',
+            { access_token: page_access_token, subscribed_fields: ['leadgen'] },
+            function (response) {
+                console.log('Successfully subscribed page', response);
+            }
+        );
+    }
 
     useEffect(() => {
 
@@ -63,6 +66,7 @@ export default function Home() {
                     </svg>
                     <span className="p-1">Facebook Login</span>
                 </button>
+                <ul id="list"></ul>
             </div>
         </>
     )
