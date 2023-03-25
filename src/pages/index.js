@@ -13,7 +13,7 @@ export default function Home() {
                     var li = document.createElement('li');
                     var a = document.createElement('a');
                     a.href = "#";
-                    a.onclick = leadgenForms.bind(this, page.id, page.access_token);
+                    a.onclick = subscribeApp.bind(this, page.id, page.access_token);
                     a.innerHTML = page.name;
                     li.appendChild(a);
                     ul.appendChild(li);
