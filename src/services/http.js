@@ -2,7 +2,7 @@ import _axios from 'axios'
 
 export default class Http {
     static axios = _axios.create({
-        baseURL: 'https://www.facebook.com/v15.0/',
+        baseURL: 'https://www.facebook.com/v16.0/',
         headers: { 'Content-Type': 'application/json' },
     });
 
